@@ -1,7 +1,7 @@
 from agents.graph import bi_graph
 
 initial_state = {
-    "query": "What are the growth trends in the Indian EdTech market?",
+    "query": "How is Tier-2 and Tier-3 city adoption affecting Indian EdTech growth?",
     "research_findings": None,
     "analysis": None,
     "final_report": None
