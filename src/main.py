@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from agents.graph import bi_graph
 
 app = FastAPI(title="Multi-Agent BI Assistant")
 
@@ -12,5 +13,18 @@ def health_check():
 
 @app.post("/analyze")
 def analyze(request: QueryRequest):
-    # Placeholder — agent logic will plug in here in Task 4/5
-    return {"query": request.query, "result": "pipeline not yet connected"}
+    initial_state = {
+        "query": request.query,
+        "research_findings": None,
+        "analysis": None,
+        "final_report": None
+    }
+
+    final_state = bi_graph.invoke(initial_state)
+
+    return {
+        "query": request.query,
+        "research_findings": final_state["research_findings"],
+        "analysis": final_state["analysis"],
+        "final_report": final_state["final_report"]
+    }
