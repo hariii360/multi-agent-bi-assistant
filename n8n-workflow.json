@@ -21,7 +21,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "http://127.0.0.1:8000/analyze",
+        "url": "={{ $json.body.mode === 'deep' ? 'http://127.0.0.1:8000/deep-analyze' : 'http://127.0.0.1:8000/analyze' }}",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n       \"query\": \"{{ $json.body.query }}\"\n}",
@@ -71,7 +71,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const text = $json.final_report;\n\nconst slackText = text\n  .replace(/\\*\\*(.*?)\\*\\*/g, '*$1*')       // **bold** → *bold*\n  .replace(/^#{1,6}\\s*(.*)$/gm, '*$1*');   // ## Header → *Header*\n\nreturn [{\n  json: {\n    ...$json,\n    slack_text: slackText\n  }\n}];"
+        "jsCode": "const text = $json.final_report;\nconst query = $json.query;\nconst mode = $json.mode;\n\nconst modeLabel = mode === 'deep' ? 'Deep Analysis' : 'Quick Analysis';\n\nconst slackText = `*Query:* ${query}\\n*Mode:* ${modeLabel}\\n\\n` + text\n  .replace(/\\*\\*(.*?)\\*\\*/g, '*$1*')       // **bold** → *bold*\n  .replace(/^#{1,6}\\s*(.*)$/gm, '*$1*');   // ## Header → *Header*\n\nreturn [{\n  json: {\n    ...$json,\n    slack_text: slackText\n  }\n}];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -256,7 +256,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "5366ce41-5bd5-495a-9fde-c037396c10c7",
+  "versionId": "bd581bf9-1fe9-43fa-8cb3-9acedc504d63",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "YOUR_N8N_INSTANCE_ID"

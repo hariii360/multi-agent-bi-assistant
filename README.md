@@ -58,11 +58,12 @@ Both converge into n8n, which routes the final report to Slack or Email.
   Returns `mode: "deep"`, `research_findings`, `critique`, and `final_report`.
 
 ## n8n Webhook
-- `POST http://localhost:5678/webhook-test/bi-assistant`
+   - `POST http://localhost:5678/webhook-test/bi-assistant`
 ```json
-  { "query": "<your business question>", "channel": "slack" }
+     { "query": "...", "channel": "slack", "mode": "fast" }
 ```
-  `channel` accepts `"slack"` or `"email"` and routes the final report to the corresponding delivery path via a Switch node. Defaults to Slack if omitted.
+     - `channel` accepts `"slack"` or `"email"` — defaults to Slack if omitted
+     - `mode` accepts `"fast"` (LangGraph) or `"deep"` (CrewAI) — defaults to fast if omitted
 
 ## Delivery
 Two delivery channels are supported, chosen per-request:
@@ -109,4 +110,4 @@ See real pipeline outputs in [`data/sample_outputs/`](data/sample_outputs/), inc
 - [x] Dual delivery channels (Slack, Gmail) with per-request routing
 - [x] Deep pipeline (Researcher, Critic, Strategist) built with CrewAI
 - [x] `/deep-analyze` endpoint exposing the CrewAI crew
-- [ ] n8n mode routing between `/analyze` and `/deep-analyze`
+- [x] n8n mode routing between `/analyze` and `/deep-analyze`
