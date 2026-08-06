@@ -1,0 +1,93 @@
+{
+  "name": "BI Assistant Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bi-assistant",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "d032755f-3501-42a8-b423-8fe0f51e2dd1",
+      "name": "Webhook",
+      "webhookId": "0332a126-97e6-4b45-8c46-880adf3bd8bc"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/analyze",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n       \"query\": \"{{ $json.body.query }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        0,
+        -32
+      ],
+      "id": "49a6a4c0-d982-478b-a343-3fb4d3968afb",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        192,
+        -32
+      ],
+      "id": "6cd61130-a541-4a31-8dea-54f794714ab2",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7ecf3a07-1572-4c74-b170-ead02704098f",
+  "meta": {
+    "instanceId": "143e0bd9d471111d41d190f8a4237a4fb18ed0805ba00632b7152311d7a9a7c0"
+  },
+  "nodeGroups": [],
+  "id": "zcYM5jYuWL259QOi",
+  "tags": []
+}
