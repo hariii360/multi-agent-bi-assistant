@@ -11,7 +11,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -224,
+        -448,
         -32
       ],
       "id": "d032755f-3501-42a8-b423-8fe0f51e2dd1",
@@ -30,7 +30,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.5,
       "position": [
-        0,
+        -224,
         -32
       ],
       "id": "49a6a4c0-d982-478b-a343-3fb4d3968afb",
@@ -45,11 +45,42 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        192,
+        416,
         -32
       ],
       "id": "6cd61130-a541-4a31-8dea-54f794714ab2",
       "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": {{ JSON.stringify($json.slack_text) }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        -32
+      ],
+      "id": "14f39bd0-c652-41b0-bb7c-fd09e5bb76c6",
+      "name": "Send to Slack"
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $json.final_report;\n\nconst slackText = text\n  .replace(/\\*\\*(.*?)\\*\\*/g, '*$1*')       // **bold** → *bold*\n  .replace(/^#{1,6}\\s*(.*)$/gm, '*$1*');   // ## Header → *Header*\n\nreturn [{\n  json: {\n    ...$json,\n    slack_text: slackText\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -32
+      ],
+      "id": "ef4cefda-4591-43c0-987f-79f990062207",
+      "name": "Format for Slack"
     }
   ],
   "pinData": {},
@@ -69,7 +100,29 @@
       "main": [
         [
           {
+            "node": "Format for Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to Slack": {
+      "main": [
+        [
+          {
             "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format for Slack": {
+      "main": [
+        [
+          {
+            "node": "Send to Slack",
             "type": "main",
             "index": 0
           }
@@ -83,7 +136,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "7ecf3a07-1572-4c74-b170-ead02704098f",
+  "versionId": "09129735-5b94-43fa-abfd-fe600183e75e",
   "meta": {
     "instanceId": "143e0bd9d471111d41d190f8a4237a4fb18ed0805ba00632b7152311d7a9a7c0"
   },

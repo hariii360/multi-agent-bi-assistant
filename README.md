@@ -37,4 +37,10 @@ User Query → Researcher (RAG via ChromaDB) → Analyst (trends/risks/opportuni
 ## Status
 - [x] Core agent pipeline (Researcher, Analyst, Writer) wired with LangGraph
 - [x] FastAPI integration, ChromaDB RAG, logging & error handling
-- [ ] n8n workflow (webhook → FastAPI → delivery channel)
+- [x] n8n workflow (webhook → FastAPI → delivery channel)
+
+## Delivery
+Final reports are posted to Slack via an Incoming Webhook.
+To reproduce: create a Slack app → enable Incoming Webhooks → add the
+webhook URL into the "Send to Slack" node's URL field in n8n
+(not committed to this repo for security — see n8n-workflow.json placeholder).
