@@ -78,6 +78,7 @@ To reproduce: enable 2-Step Verification on your Google account → generate an 
 | Service | Purpose | Type |
 |---|---|---|
 | **Groq API** | LLM inference for all agents in both pipelines — `llama-3.3-70b-versatile` | REST API (OpenAI-compatible) |
+| **HuggingFace Hub** | One-time download of the `all-MiniLM-L6-v2` embedding model weights on first run | HTTPS download (not a runtime API call) |
 | **Slack Incoming Webhooks API** | Delivers the final report to a Slack channel | REST Webhook |
 | **Gmail SMTP** | Delivers the final report via email | SMTP protocol (via n8n's native Send Email node) |
 
@@ -93,6 +94,16 @@ To reproduce: enable 2-Step Verification on your Google account → generate an 
 
 ## Known Compatibility Notes
 `agents/deep_crew.py` includes a scoped patch for a CrewAI/Groq caching conflict via LiteLLM (see inline comment for details and pinned versions). If upgrading `crewai` or `litellm`, verify this is still needed.
+
+## Testing
+Standalone verification scripts for each component are in `tests/`. Run any of them directly, e.g.:
+`python tests/test_graph.py`
+(Note: these are manual verification scripts, not automated pytest test cases — a `pytest`-based test suite would be a natural next step.)
+
+## Knowledge Base
+The `data/knowledge_base/` folder currently ships with two sample `.txt` files (Indian EdTech market context) to demonstrate RAG retrieval out of the box.
+
+**To use your own data:** drop any `.txt` files into `data/knowledge_base/` and re-run `python src/ingest.py` — no code changes needed. Support for `.pdf` and `.csv` ingestion would be a natural extension (see Scaling section).
 
 ## Sample Outputs
 See real pipeline outputs in [`data/sample_outputs/`](data/sample_outputs/), including a [fast vs. deep mode comparison](data/sample_outputs/fast_vs_deep_comparison.md) showing why the project uses two agent frameworks.
