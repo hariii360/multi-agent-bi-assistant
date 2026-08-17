@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from agents.graph import bi_graph
+from agents.fast_graph import bi_graph
 from agents.deep_crew import run_deep_analysis
 from src.logger import logger
 from src.kb_routes import router as kb_router

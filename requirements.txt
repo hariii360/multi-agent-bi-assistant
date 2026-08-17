@@ -5,6 +5,7 @@ langchain-groq
 langgraph
 crewai==1.15.12     #1.15.12 installed version
 litellm==1.95.0     #1.95.0 installed version
+tenacity
 chromadb
 pypdf
 python-dotenv

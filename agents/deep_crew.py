@@ -1,12 +1,13 @@
 import os
 from dotenv import load_dotenv
 from crewai import Agent, Task, Crew, Process, LLM
-
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from groq import RateLimitError
 
 import crewai.llms.cache as _crewai_cache
-# Workaround: CrewAI's cache-breakpoint marker conflicts with Groq's response 
+# Workaround: CrewAI's cache-breakpoint marker conflicts with Groq's response
 # format via LiteLLM, causing a crash during multi-agent execution.
-# This no-ops the marker function until upstream CrewAI/LiteLLM fixes Groq compatibility. 
+# This no-ops the marker function until upstream CrewAI/LiteLLM fixes Groq compatibility.
 # Verified working with crewai==1.15.12, litellm==1.95.0 as of Aug 2026.
 _crewai_cache.mark_cache_breakpoint = lambda msg: msg
 
@@ -14,7 +15,7 @@ _crewai_cache.mark_cache_breakpoint = lambda msg: msg
 load_dotenv()
 
 llm = LLM(
-    model="groq/llama-3.3-70b-versatile",
+    model="groq/openai/gpt-oss-20b",
     api_key=os.getenv("GROQ_API_KEY")
 )
 
@@ -67,6 +68,18 @@ strategist = Agent(
     llm=llm,
     verbose=True
 )
+
+
+@retry(
+    stop=stop_after_attempt(4),
+    wait=wait_exponential(multiplier=2, min=5, max=60),
+    retry=retry_if_exception_type(RateLimitError)
+)
+def _run_crew_with_retry(crew: Crew):
+    """Runs the crew, automatically retrying with exponential backoff if
+    Groq's free-tier TPM/RPM rate limit is hit mid-execution."""
+    return crew.kickoff()
+
 
 def run_deep_analysis(query: str) -> dict:
     research_task = Task(
@@ -143,7 +156,7 @@ def run_deep_analysis(query: str) -> dict:
         verbose=True
     )
 
-    result = crew.kickoff()
+    result = _run_crew_with_retry(crew)
 
     return {
         "research": research_task.output.raw if research_task.output else None,

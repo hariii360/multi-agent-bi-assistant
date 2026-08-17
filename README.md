@@ -7,7 +7,7 @@ A hybrid multi-agent Business Intelligence assistant. Combines two Python-based 
 - **Core Agent Brain (Fast):** FastAPI + LangGraph (Researcher → Analyst → Writer pipeline)
 - **Core Agent Brain (Deep):** FastAPI + CrewAI (Researcher → Adversarial Critic → Strategist crew)
 - **Vector DB:** ChromaDB (local, persistent, RAG-grounded LangGraph Researcher agent)
-- **LLM:** Groq (llama-3.3-70b-versatile, free tier) via LiteLLM for CrewAI compatibility
+- **LLM:** Groq (openai/gpt-oss-20b, free tier) via LiteLLM for CrewAI compatibility
 - **Embeddings:** sentence-transformers (all-MiniLM-L6-v2, free/local)
 - **Delivery:** Slack or Email, selected per-request via an n8n Switch node
 
@@ -77,7 +77,7 @@ To reproduce: enable 2-Step Verification on your Google account → generate an 
 ## APIs & External Services Used
 | Service | Purpose | Type |
 |---|---|---|
-| **Groq API** | LLM inference for all agents in both pipelines — `llama-3.3-70b-versatile` | REST API (OpenAI-compatible) |
+| **Groq API** | LLM inference for all agents in both pipelines — `openai/gpt-oss-20b` | REST API (OpenAI-compatible) |
 | **HuggingFace Hub** | One-time download of the `all-MiniLM-L6-v2` embedding model weights on first run | HTTPS download (not a runtime API call) |
 | **Slack Incoming Webhooks API** | Delivers the final report to a Slack channel | REST Webhook |
 | **Gmail SMTP** | Delivers the final report via email | SMTP protocol (via n8n's native Send Email node) |
