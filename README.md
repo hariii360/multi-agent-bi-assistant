@@ -11,7 +11,7 @@ A hybrid multi-agent Business Intelligence assistant. Combines two Python-based 
 - **Embeddings:** sentence-transformers (all-MiniLM-L6-v2, free/local)
 - **Delivery:** Slack or Email, selected per-request via an n8n Switch node
 
-![Architecture Diagram](docs/architecture-diagram.svg)
+![Architecture Diagram](docs/architecture-diagram.png)
 
 ## Why Two Agent Frameworks?
 This project intentionally uses LangGraph and CrewAI for different jobs, mirroring *System 1 / System 2* thinking:

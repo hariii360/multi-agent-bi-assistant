@@ -3,8 +3,11 @@ from pydantic import BaseModel
 from agents.graph import bi_graph
 from agents.deep_crew import run_deep_analysis
 from src.logger import logger
+from src.kb_routes import router as kb_router
 
 app = FastAPI(title="Multi-Agent BI Assistant")
+
+app.include_router(kb_router)
 
 class QueryRequest(BaseModel):
     query: str

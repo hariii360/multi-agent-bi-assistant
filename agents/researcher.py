@@ -1,8 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-import chromadb
-from chromadb.utils import embedding_functions
+from src.chroma_client import collection
 from agents.state import AgentState
 
 load_dotenv()
@@ -10,18 +9,6 @@ load_dotenv()
 llm = ChatGroq(
     model="llama-3.3-70b-versatile",
     api_key=os.getenv("GROQ_API_KEY")
-)
-
-CHROMA_PATH = "chroma_db"
-
-embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-    model_name="all-MiniLM-L6-v2"
-)
-
-client = chromadb.PersistentClient(path=CHROMA_PATH)
-collection = client.get_or_create_collection(
-    name="bi_knowledge_base",
-    embedding_function=embedding_fn
 )
 
 def retrieve_context(query: str, n_results: int = 2) -> str:

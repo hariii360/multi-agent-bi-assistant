@@ -6,3 +6,4 @@ chroma_db/
 .DS_Store
 app.log
 node_modules
+data/kb_metadata.json
